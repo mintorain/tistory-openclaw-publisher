@@ -116,7 +116,17 @@ node src/post-topic.js --topic "오픈클로 자동화로 블로그 운영하는
 node src/post-topic.js --topic "Claude CLI 활용법" --category "클로드코드" --tags "Claude CLI,MCP,AI코딩"
 ```
 
-### 6) 로그인 막힐 때 브라우저 띄우기
+### 6) Blogger 공개 이미지 함께 넣기
+
+```bash
+node src/post-topic.js --topic "오픈클로 자동화로 블로그 운영하는 법" --platform blogger --images "https://example.com/cover.jpg,https://example.com/chart.png" --headed
+```
+
+- 현재 Blogger 이미지는 **공개 URL 방식**으로 넣습니다.
+- 전달한 URL은 글 상단에 `<img>`로 삽입됩니다.
+- 안정성을 위해 `https://` 기반 공개 이미지 사용을 권장합니다.
+
+### 7) 로그인 막힐 때 브라우저 띄우기
 
 ```bash
 node src/post-topic.js --topic "티스토리 자동화" --headed
@@ -175,6 +185,7 @@ src/
 - Blogger 편집기 UI가 바뀌면 HTML 모드 전환이나 발행 버튼 selector 수정이 필요할 수 있습니다.
 - 2차 인증/추가 인증이 걸리면 `--headed`로 수동 로그인을 마쳐야 합니다.
 - 공개 썸네일 URL을 쓰는 방식이 가장 안정적입니다.
+- Blogger 이미지 첨부는 현재 공개 URL 기반입니다. 로컬 파일 직접 업로드는 아직 지원하지 않습니다.
 - 계정/쿠키/세션 파일은 절대 GitHub에 올리지 마세요.
 - 초안 생성은 되는데 발행이 안 되면 `auth-state.json`을 지우고 `--headed`로 다시 로그인해 보세요.
 - Blogger 발행이 안 되면 `blogger-auth-state.json`을 지우고 `--platform blogger --headed`로 다시 로그인해 보세요.

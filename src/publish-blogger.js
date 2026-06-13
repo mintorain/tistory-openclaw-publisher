@@ -2,6 +2,33 @@ const fs = require('fs');
 const { config } = require('./config');
 const { openBloggerSession, log } = require('./blogger-auth');
 
+function escapeHtml(value) {
+  return String(value || '')
+    .replace(/&/g, '&amp;')
+    .replace(/</g, '&lt;')
+    .replace(/>/g, '&gt;')
+    .replace(/"/g, '&quot;');
+}
+
+function buildImageGallery(post) {
+  const images = Array.isArray(post.images) ? post.images.map(url => String(url || '').trim()).filter(Boolean) : [];
+  if (!images.length) return '';
+
+  const altBase = escapeHtml(post.title || post.topic || config.blog.name || 'Blogger image');
+  const items = images.map((url, index) => `
+<figure style="margin:24px 0;text-align:center;">
+  <img src="${escapeHtml(url)}" alt="${altBase} 이미지 ${index + 1}" style="max-width:100%;height:auto;border-radius:16px;box-shadow:0 10px 30px rgba(15,23,42,0.12);" loading="lazy"/>
+</figure>`).join('');
+
+  return `
+<div style="margin:12px 0 32px;">${items}
+</div>`;
+}
+
+function mergeBloggerImages(post) {
+  return `${buildImageGallery(post)}${post.content || ''}`;
+}
+
 async function switchToHtmlMode(page) {
   const htmlToggleSelectors = [
     'button[aria-label*="HTML"]',
@@ -175,7 +202,8 @@ async function publishBloggerFromFile(filePath = config.paths.tempPost, options 
     await page.waitForTimeout(800);
 
     log('📝 본문 입력...');
-    const contentMode = await fillHtmlContent(page, post.content);
+    const bloggerHtml = mergeBloggerImages(post);
+    const contentMode = await fillHtmlContent(page, bloggerHtml);
     if (!contentMode) throw new Error('Blogger 본문 입력 영역을 찾지 못했습니다.');
     await page.waitForTimeout(1200);
 

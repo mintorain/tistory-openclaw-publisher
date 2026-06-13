@@ -13,6 +13,7 @@ function parseArgs(argv) {
     topic: '',
     category: '',
     tags: [],
+    images: [],
     platform: 'tistory'
   };
 
@@ -21,6 +22,8 @@ function parseArgs(argv) {
     if (current === '--topic') options.topic = argv[++i] || '';
     else if (current === '--category') options.category = argv[++i] || '';
     else if (current === '--tags') options.tags = (argv[++i] || '').split(',').map(v => v.trim()).filter(Boolean);
+    else if (current === '--image') options.images.push(argv[++i] || '');
+    else if (current === '--images') options.images.push(...(argv[++i] || '').split(',').map(v => v.trim()).filter(Boolean));
     else if (current === '--visibility') options.visibility = argv[++i] || config.blog.defaultVisibility;
     else if (current === '--draft' || current === '--dry-run') options.publish = false;
     else if (current === '--headed') options.headed = true;
@@ -44,6 +47,7 @@ async function main() {
   console.log(`- 제목: ${post.title}`);
   console.log(`- 카테고리: ${post.category}`);
   console.log(`- 태그: ${post.tags.join(', ')}`);
+  console.log(`- 이미지: ${(post.images || []).length}개`);
   console.log(`- 공개여부: ${post.visibility}`);
   console.log(`- 플랫폼: ${options.platform}`);
 

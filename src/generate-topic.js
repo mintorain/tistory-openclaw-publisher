@@ -59,7 +59,14 @@ function buildCtaBox() {
 </div>`;
 }
 
-async function generateTopicPost({ topic, category, tags = [], visibility }) {
+function normalizeImages(images) {
+  return [...new Set((images || [])
+    .map(image => String(image || '').trim())
+    .filter(Boolean))]
+    .slice(0, 5);
+}
+
+async function generateTopicPost({ topic, category, tags = [], visibility, images = [] }) {
   if (!topic) throw new Error('topic이 필요합니다.');
 
   const chosenCategory = category || inferCategory(topic);
@@ -86,10 +93,13 @@ async function generateTopicPost({ topic, category, tags = [], visibility }) {
 
   const cleanBody = String(body).replace(/^```html\n?/i, '').replace(/```$/i, '').trim();
 
+  const normalizedImages = normalizeImages(images);
+
   return {
     title: meta.title || topic,
     category: chosenCategory,
     tags: normalizeTags([...(meta.tags || []), ...tags]),
+    images: normalizedImages,
     summary: meta.summary || '',
     visibility: visibility || config.blog.defaultVisibility,
     topic,
@@ -97,4 +107,4 @@ async function generateTopicPost({ topic, category, tags = [], visibility }) {
   };
 }
 
-module.exports = { generateTopicPost, inferCategory, normalizeTags };
+module.exports = { generateTopicPost, inferCategory, normalizeTags, normalizeImages };
