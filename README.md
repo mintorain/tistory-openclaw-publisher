@@ -21,6 +21,7 @@
 - 세션 만료 시 자동 로그인 시도
 - 실패 시 headed 브라우저로 수동 로그인 fallback
 - OpenClaw cron/작업 자동화에 연결하기 쉬운 CLI 구조
+- 공개 저장소 기반이라 다른 OpenClaw 사용자도 그대로 복제해서 쓸 수 있음
 
 ## 준비물
 
@@ -66,6 +67,14 @@ OPENAI_API_KEY=your_api_key
 OPENAI_MODEL=llama-3.3-70b-versatile
 ```
 
+## 빠른 시작
+
+1. 저장소를 클론합니다.
+2. `.env.example`를 `.env`로 복사합니다.
+3. 카카오 계정, 티스토리 블로그명, LLM API 값을 채웁니다.
+4. 먼저 `--draft`로 `temp-post.json`이 잘 만들어지는지 확인합니다.
+5. 이상 없으면 실제 발행을 실행합니다.
+
 ## 사용법
 
 ### 1) 초안만 생성
@@ -101,7 +110,9 @@ OpenClaw에서 이 패키지를 호출하는 방식은 간단합니다.
 예시 프롬프트:
 
 - "`tistory-openclaw-publisher` 저장소를 설치해 두고, 주제를 받아 초안을 만든 뒤 발행해줘"
-- 또는 OpenClaw cron에서 아래처럼 실행
+- "`temp-post.json`부터 먼저 보여주고 괜찮으면 발행해줘"
+
+또는 OpenClaw cron/백그라운드 작업에서 아래처럼 실행할 수 있습니다.
 
 ```powershell
 cd C:\path\to\tistory-openclaw-publisher
@@ -109,6 +120,12 @@ node src/post-topic.js --topic "오늘의 AI 동향"
 ```
 
 크론 예시는 저장소의 `openclaw-cron-example.json` 파일을 참고하면 됩니다.
+
+### OpenClaw cron 설정 팁
+
+- 크론 작업 모델은 현재 OpenClaw allowlist에 포함된 모델을 쓰세요.
+- 모델 allowlist 이슈가 있으면 payload에서 모델을 빼고 기본 모델을 쓰는 편이 안전합니다.
+- 처음에는 `--draft` 기반 작업으로 검증한 뒤 실제 발행 크론으로 전환하는 걸 권장합니다.
 
 ## 기본 카테고리 추론 규칙
 
@@ -131,12 +148,14 @@ src/
   post-topic.js      # CLI 진입점
 ```
 
-## 주의사항
+## 문제 해결
 
 - 티스토리 로그인 정책이 바뀌면 selector 수정이 필요할 수 있습니다.
 - 2차 인증/추가 인증이 걸리면 `--headed`로 수동 로그인을 마쳐야 합니다.
 - 공개 썸네일 URL을 쓰는 방식이 가장 안정적입니다.
 - 계정/쿠키/세션 파일은 절대 GitHub에 올리지 마세요.
+- 초안 생성은 되는데 발행이 안 되면 `auth-state.json`을 지우고 `--headed`로 다시 로그인해 보세요.
+- API 호출 오류가 나면 `OPENAI_BASE_URL`, `OPENAI_API_KEY`, `OPENAI_MODEL` 값을 먼저 확인하세요.
 
 ## 라이선스
 

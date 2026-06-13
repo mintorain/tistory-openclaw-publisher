@@ -8,9 +8,9 @@
   "sessionTarget": "isolated",
   "payload": {
     "kind": "agentTurn",
-    "message": "Go to C:\\path\\to\\tistory-openclaw-publisher and run: node src/post-topic.js --topic \"오늘의 AI 동향\". If login is blocked, report the blocker.",
+    "message": "In C:\\path\\to\\tistory-openclaw-publisher, first run `node src/post-topic.js --draft --topic \"오늘의 AI 동향\"` and confirm temp-post.json is created. If that succeeds, run `node src/post-topic.js --topic \"오늘의 AI 동향\"`. If login or publishing fails, report the exact blocker.",
     "timeoutSeconds": 900,
-    "toolsAllow": ["exec","process","read","write"]
+    "toolsAllow": ["exec", "process", "read", "write"]
   },
   "delivery": {
     "mode": "announce"
