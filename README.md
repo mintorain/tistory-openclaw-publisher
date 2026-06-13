@@ -157,6 +157,13 @@ src/
 - 초안 생성은 되는데 발행이 안 되면 `auth-state.json`을 지우고 `--headed`로 다시 로그인해 보세요.
 - API 호출 오류가 나면 `OPENAI_BASE_URL`, `OPENAI_API_KEY`, `OPENAI_MODEL` 값을 먼저 확인하세요.
 
+## Skill
+
+이 저장소에는 OpenClaw에서 바로 참고할 수 있는 스킬 초안도 포함되어 있습니다.
+
+- `skill/SKILL.md`
+- `skill/references/setup.md`
+
 ## 라이선스
 
 MIT
