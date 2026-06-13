@@ -1,0 +1,18 @@
+{
+  "name": "daily-tistory-post",
+  "schedule": {
+    "kind": "cron",
+    "expr": "0 7 * * *",
+    "tz": "Asia/Seoul"
+  },
+  "sessionTarget": "isolated",
+  "payload": {
+    "kind": "agentTurn",
+    "message": "Go to C:\\path\\to\\tistory-openclaw-publisher and run: node src/post-topic.js --topic \"오늘의 AI 동향\". If login is blocked, report the blocker.",
+    "timeoutSeconds": 900,
+    "toolsAllow": ["exec","process","read","write"]
+  },
+  "delivery": {
+    "mode": "announce"
+  }
+}

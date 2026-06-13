@@ -1,0 +1,31 @@
+{
+  "name": "tistory-openclaw-publisher",
+  "version": "0.1.0",
+  "description": "Reusable Tistory blog automation package for OpenClaw users",
+  "type": "commonjs",
+  "main": "src/post-topic.js",
+  "bin": {
+    "tistory-openclaw-publisher": "src/post-topic.js"
+  },
+  "scripts": {
+    "draft": "node src/post-topic.js --draft --topic \"OpenClaw 자동화 예시\"",
+    "publish": "node src/post-topic.js --topic \"OpenClaw 자동화 예시\"",
+    "check": "node --check src/config.js && node --check src/llm.js && node --check src/auth.js && node --check src/generate-topic.js && node --check src/publish-post.js && node --check src/post-topic.js"
+  },
+  "keywords": [
+    "tistory",
+    "openclaw",
+    "blog",
+    "automation",
+    "playwright"
+  ],
+  "author": "mintorain",
+  "license": "MIT",
+  "engines": {
+    "node": ">=20"
+  },
+  "dependencies": {
+    "dotenv": "^17.3.1",
+    "playwright": "^1.58.2"
+  }
+}
