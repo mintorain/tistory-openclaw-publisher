@@ -40,12 +40,23 @@ const config = {
     apiKey: required('OPENAI_API_KEY'),
     model: required('OPENAI_MODEL')
   },
+  blogger: {
+    blogId: optional('BLOGGER_BLOG_ID', ''),
+    blogUrl: optional('BLOGGER_BLOG_URL', ''),
+    enabled: optional('BLOGGER_ENABLED', 'false').toLowerCase() === 'true'
+  },
   paths: {
     root: path.join(__dirname, '..'),
     authState: path.join(__dirname, '..', 'auth-state.json'),
     cookies: path.join(__dirname, '..', 'cookies.json'),
-    tempPost: path.join(__dirname, '..', 'temp-post.json')
+    tempPost: path.join(__dirname, '..', 'temp-post.json'),
+    bloggerAuthState: path.join(__dirname, '..', 'blogger-auth-state.json'),
+    bloggerCookies: path.join(__dirname, '..', 'blogger-cookies.json')
   }
 };
+
+if (config.blogger.blogId) {
+  config.blogger.newPostUrl = `https://www.blogger.com/blog/post/edit/${config.blogger.blogId}`;
+}
 
 module.exports = { config };

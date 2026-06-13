@@ -10,10 +10,11 @@
   "scripts": {
     "draft": "node src/post-topic.js --draft --topic \"OpenClaw 자동화 예시\"",
     "publish": "node src/post-topic.js --topic \"OpenClaw 자동화 예시\"",
-    "check": "node --check src/config.js && node --check src/llm.js && node --check src/auth.js && node --check src/generate-topic.js && node --check src/publish-post.js && node --check src/post-topic.js"
+    "check": "node --check src/config.js && node --check src/llm.js && node --check src/auth.js && node --check src/blogger-auth.js && node --check src/generate-topic.js && node --check src/publish-post.js && node --check src/publish-blogger.js && node --check src/post-topic.js"
   },
   "keywords": [
     "tistory",
+    "blogger",
     "openclaw",
     "blog",
     "automation",

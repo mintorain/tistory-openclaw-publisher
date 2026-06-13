@@ -3,6 +3,7 @@ const fs = require('fs');
 const { config } = require('./config');
 const { generateTopicPost } = require('./generate-topic');
 const { publishPostFromFile } = require('./publish-post');
+const { publishBloggerFromFile } = require('./publish-blogger');
 
 function parseArgs(argv) {
   const options = {
@@ -11,7 +12,8 @@ function parseArgs(argv) {
     headed: false,
     topic: '',
     category: '',
-    tags: []
+    tags: [],
+    platform: 'tistory'
   };
 
   for (let i = 0; i < argv.length; i += 1) {
@@ -22,6 +24,7 @@ function parseArgs(argv) {
     else if (current === '--visibility') options.visibility = argv[++i] || config.blog.defaultVisibility;
     else if (current === '--draft' || current === '--dry-run') options.publish = false;
     else if (current === '--headed') options.headed = true;
+    else if (current === '--platform') options.platform = (argv[++i] || 'tistory').toLowerCase();
     else if (!current.startsWith('--') && !options.topic) options.topic = current;
   }
 
@@ -42,13 +45,30 @@ async function main() {
   console.log(`- 카테고리: ${post.category}`);
   console.log(`- 태그: ${post.tags.join(', ')}`);
   console.log(`- 공개여부: ${post.visibility}`);
+  console.log(`- 플랫폼: ${options.platform}`);
 
   if (!options.publish) {
     console.log('🟡 초안만 생성했습니다. 발행은 생략합니다.');
     return;
   }
 
-  await publishPostFromFile(config.paths.tempPost, { headed: options.headed });
+  if (options.platform === 'tistory') {
+    await publishPostFromFile(config.paths.tempPost, { headed: options.headed });
+    return;
+  }
+
+  if (options.platform === 'blogger') {
+    await publishBloggerFromFile(config.paths.tempPost, { headed: options.headed });
+    return;
+  }
+
+  if (options.platform === 'both') {
+    await publishPostFromFile(config.paths.tempPost, { headed: options.headed });
+    await publishBloggerFromFile(config.paths.tempPost, { headed: options.headed });
+    return;
+  }
+
+  throw new Error(`지원하지 않는 플랫폼입니다: ${options.platform}. tistory | blogger | both 중 하나를 사용하세요.`);
 }
 
 if (require.main === module) {
